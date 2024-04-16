@@ -31,7 +31,7 @@ export class HtmlLoader {
             // Checking if the request has been completed and the response has been received.
             if (xhr.readyState === 4 && xhr.status === 200) {
                 // If the request is successful (status code 200), set the innerHTML of the specified element to the response text.
-                document.getElementById(loadTo).innerHTML = xhr.responseText;
+                document.getElementById(loadTo).innerHTML += xhr.responseText;
             }
         };
 
