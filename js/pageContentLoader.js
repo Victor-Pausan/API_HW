@@ -20,7 +20,7 @@ export class HtmlLoader {
 
 
         // Opening a connection to the specified URL using the HTTP GET method.
-        xhr.open("GET", fetchFrom, true);
+        xhr.open("GET", fetchFrom, false);
 
         // Setting up a callback function to be executed when the state of the XMLHttpRequest changes.
         // readystate -> daca sa terminat requestu

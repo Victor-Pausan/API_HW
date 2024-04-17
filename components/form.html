@@ -1,0 +1,21 @@
+<form id="form" class="contact-form needs-validation" method="GET" novalidate>
+
+    <div class="recipie-name form-floating mb-3">
+      <input type="text" id="recipie-name" name="recipie-name" class="form-control">
+      <div id="recipie-name-error" class="error-message"><?php echo isset($_SESSION["first-name-error".$form]) ? $_SESSION["first-name-error".$form] : ""; ?></div>
+      <label for="recipie-name" id="recipie-name-label">Recipie Name:</label>
+    </div>
+
+    <div class="ingredients form-floating mb-3">
+      <input type="text" id="ingredients" name="ingredients" class="form-control">
+      <div id="ingredients-error" class="error-message"><?php echo isset($_SESSION["email-error".$form]) ? $_SESSION["email-error".$form] : ""; ?></div>
+      <label for="ingredients" id="ingredients-label">Ingredients and Measurements</label>
+    </div>
+
+    <div class="instructions form-floating mb-3">
+      <textarea id="instructions" name="instructions" class="form-control"></textarea>
+      <div id="instructions-error" class="error-message"><?php echo isset($_SESSION["message-error".$form]) ? $_SESSION["message-error".$form] : ""; ?></div>
+      <label for="instructions" id="instructions-label">Instructions:</label>
+    </div>
+    <button type="submit" class="btn btn-warning" style="width: 100%;">Add Recipie</button>
+  </form>
