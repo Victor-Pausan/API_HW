@@ -1,6 +1,5 @@
 import { MyRecipie } from "./Models/myRecipie.js";
 import { HtmlLoader } from "./pageContentLoader.js";
-import { RecipieFetcher } from "./recipieFetcher.js";
 
 let htmlLoader = new HtmlLoader();
 htmlLoader.loadHtml("./components/nav-bar.html", "header");
@@ -115,37 +114,94 @@ function getData(){
         }
         return response.json();
     })
-    .then(data => {
-        return data.map((recipie => {
-            return new MyRecipie(recipie)
+    .then((data) => {
+        data = data["data"]["items"];
+        return Object.keys(data).map((recipie => {
+            return new MyRecipie(data[recipie]);
         }))
     })
-    .then((recipie) => {
-        let container = document.getElementById("recipie-display");
-        displayRecipie(recipie, container);
+    .then((recipies) => {
+        Object.keys(recipies).forEach(recipie => {
+            displayRecipie(recipies[recipie]);
+        });
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
     });
 }
 
-function displayRecipie(recipie, container){
+function displayRecipie(recipie){
     let recipieCard = `
-    <div class="card mb-3">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">${recipie.name}</h5>
-                    <p class="card-text">Ingredients:</p>
-                    <p>${recipie.ingredients}</p>
-                    <p class="card-text">${recipie.instructions}</p>
-                </div>
-            </div>
+    <div class="card my-3" style="width: 100%">
+        <h5 class="card-header">${recipie.data.recipie}</h5>
+        <div class="card-body">
+          <h5 class="card-title">
+            ${recipie.data.ingredients}
+          </h5>
+          <p class="card-text">
+            ${recipie.data.instructions}
+          </p>
+          <button id="${recipie.id}" class="delete-btn remove">
+            <span id="${recipie.id}" class="text remove">Delete</span>
+            <span id="${recipie.id}" class="icon remove">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                class="remove"
+                id="${recipie.id}"
+              >
+                <path
+                id="${recipie.id}"
+                class="remove"
+                  d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
+                ></path>
+              </svg>
+            </span>
+          </button>
         </div>
-    </div>
     `;
 
+    let container = document.getElementById("recipie-display");
     container.innerHTML += recipieCard;
 }
 
+function deleteRecipie(id){
+    let idObj = {
+        "id": id
+    }
+    fetch(`https://api.bwt.ro/api/dev/FE/delete`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "X-STUDENT-HEADER": "PAUSAN_VICTOR"
+        },
+        body: JSON.stringify(idObj)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const recipieSection = document.querySelector("#recipie-display");
+        recipieSection.innerHTML = "";
+        getData();
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
 getData();
+
+const recipieSection = document.querySelector("#recipie-display");
+recipieSection.addEventListener("click", (event) => {
+    if(event.target.classList.contains("remove")){
+        let id = event.target.id;
+        console.log(id);
+        deleteRecipie(id);
+    } 
+});

@@ -1,8 +1,10 @@
 export class MyRecipie{
     constructor(obj){
         this.id = obj.id,
-        this.recipieName = obj.recipie,
-        this.ingredients = obj.ingredients,
-        this.insturctions = obj.instructions
+        this.data = {
+            recipie: obj.data.recipie,
+            ingredients: obj.data.ingredients,
+            instructions: obj.data.instructions
+        }
     }
 }
